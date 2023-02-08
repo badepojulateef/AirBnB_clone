@@ -42,15 +42,21 @@ class TestBaseModel(unittest.TestCase):
     def test_3_if_id_attribute_of_BaseModal_is_unique(self):
         """ Checks """
         # Check for two instances
-        base_model1 = Base_Model()
-        base_model2 = Base_Model()
+        base_model1 = BaseModel()
+        base_model2 = BaseModel()
         base_model1.id = base_model2.id
         # Check for 1000 instances
         b = [BaseModel().id for i in range(1000)]
         self.assertEqual(len(set(b)), len(b))
 
     def test_3_str_representation(self):
-        pass
+        """ Checks if the string representation is appropriate """
+        base_model = BaseModel()
+        self.assertEqual(
+                str(base_model),
+                "[BaseModel] ({}) {}".format(
+                    base_model.id, base_model.__dict__)
+                )
 
     def test_3_to_dict(self):
         pass
