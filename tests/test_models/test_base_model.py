@@ -55,8 +55,27 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(
                 str(base_model),
                 "[BaseModel] ({}) {}".format(
-                    base_model.id, base_model.__dict__)
+                        base_model.id, base_model.__dict__
+                    )
                 )
 
+    def test_3_initial_creation(self):
+        """  """
+        base_model = BaseModel()
+        self.assertEqual(base_model.created_at.microsecond, base_model.updated_at.microsecond)
+
+    def test_3_updated_save(self):
+        """ """
+        base_model = BaseModel()
+        base_model.save()
+        self.assertNotEqual(base_model.created_at.microsecond, base_model.updated_at.microsecond)
+
     def test_3_to_dict(self):
-        pass
+        base_model = BaseModel()
+        my_model = base_model.to_dict()
+        self.assertEqual(my_model["id"], base_model.id)
+        self.assertEqual(my_model["created_at"], base_model.created_at.isoformat())
+        self.assertEqual(my_model["updated_at"], base_model.updated_at.isoformat())
+
+if __name__ == "__main__":
+    unittest.main()
