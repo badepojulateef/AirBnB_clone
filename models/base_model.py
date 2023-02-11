@@ -1,14 +1,14 @@
-#!/usr/bin/env python3
-""" A module that implements the BaseModel class """
-
+#!/usr/bin/python3
+"""
+Module containing the BaseModel class
+"""
 from uuid import uuid4
 from datetime import datetime
 
 
 class BaseModel:
     """
-    A base or super class from which all other classes
-    inherits the common attributes/methods
+    BaseModel class - common attributes/methods for all other classes
     """
     def __init__(self, *args, **kwargs):
         """ Initializes the instance attributes """
@@ -33,17 +33,13 @@ class BaseModel:
     def save(self):
         """ updates the 'updated_at' with the current datetime """
         from models import storage
-        self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
-        """
-        Returns a dictionary containing all
-        keys/values of __dict__ of the instance
-        """
+        """ Returns a dictionary containing all key/val pairs """
         my_dict = self.__dict__.copy()
         my_dict["__class__"] = self.__class__.__name__
-        for key, value in my_dict.items():
+        for key, val in my_dict.items():
             if key in ("created_at", "updated_at"):
                 my_dict[key] = my_dict[key].isoformat()
         return my_dict

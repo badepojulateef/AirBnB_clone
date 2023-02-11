@@ -5,10 +5,9 @@ from models.base_model import BaseModel
 all_objs = storage.all()
 print("-- Reloaded objects --")
 for obj_id in all_objs.keys():
+    print(obj_id)
     obj = all_objs[obj_id]
-    print("issshhhh")
     print(obj)
-    print("issshhhh")
 
 print("-- Create a new object --")
 my_model = BaseModel()
