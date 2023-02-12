@@ -67,7 +67,7 @@ class TestBaseModel(unittest.TestCase):
                 base_model.updated_at.microsecond
                 )
 
-    def test_3_updated_save(self):
+    def test_3_save(self):
         """ """
         base_model = BaseModel()
         base_model.save()
