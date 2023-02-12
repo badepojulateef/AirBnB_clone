@@ -172,14 +172,34 @@ class HBNBCommand(cmd.Cmd):
                                arg.replace(" ", "").split(",")))
             self.do_destroy("{} {}".format(class_name, arg))
         elif op == "update":
-            # parse the argument (remove the quotes from
-            # the arguments where necessary)
-            arg = " ".join([x[1:-1]
-                            if x[0] == x[-1] == "\"" and i != 2
-                            else x
-                            for i, x in
-                            enumerate(arg.replace(" ", "").split(","))])
-            self.do_update("{} {}".format(class_name, arg))
+            pattern1 = re.compile(r"\"(.+)\",\s*(\{[^\}]*\})")
+            match_obj1 = pattern1.match(arg)
+            if match_obj1 is not None:
+                obj_id = match_obj1.group(1)
+                dict_json = match_obj1.group(2).replace("\'", "\"")
+                try:
+                    dct = json.loads(dict_json)
+                except json.decoder.JSONDecodeError:
+                    print("*** Unknown syntax: {}".format(match_obj1.group(2)))
+                    return
+                key = "{}.{}".format(class_name, obj_id)
+                try:
+                    obj = storage.all()[key]
+                except KeyError:
+                    print("** no instance found **")
+                    return
+                for key, value in dct.items():
+                    setattr(obj, key, value)
+                storage.save()
+            else:
+                # parse the argument (remove the quotes from
+                # the arguments where necessary)
+                arg = " ".join([x[1:-1]
+                                if x[0] == x[-1] == "\"" and i != 2
+                                else x
+                                for i, x in
+                                enumerate(arg.replace(" ", "").split(","))])
+                self.do_update("{} {}".format(class_name, arg))
 
 
 if __name__ == '__main__':
