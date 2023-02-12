@@ -2,6 +2,7 @@
 """ command interpreter for the AirBnB clone """
 import cmd
 import json
+import re
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -130,15 +131,55 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
             return
-        attr = args[2]
-        value = args[3]
-        if value[0] == "\"" and value[-1] == "\"":
-            setattr(obj, attr, value[1:-1])
-        elif "." in value:
-            setattr(obj, attr, float(value))
-        else:
-            setattr(obj, attr, int(value))
+        setattr(obj, args[2], eval(args[3]))
         storage.save()
+
+    def default(self, line):
+        """ method for unrecognized prefix """
+        pattern = re.compile(r"^([a-zA-Z]+)\.([a-zA-Z]+)\(([^\)]*?)\)$")
+        match_obj = pattern.match(line)
+        if match_obj is None:
+            print("*** Unknown syntax: {}".format(line))
+            return
+        (class_name, op, arg) = match_obj.groups()
+        if class_name not in class_dict:
+            print("** class name doesn't exist **")
+            return
+        if op not in ("all", "count", "show", "destroy", "update"):
+            print("** invalid operation: {}.{}".format(class_name, op))
+            return
+        if op == "all":
+            self.do_all(class_name)
+        elif op == "count":
+            print(len([x.__str__()
+                      for x
+                      in storage.all().values()
+                      if x.__class__.__name__ == class_name]))
+        elif op == "show":
+            # parse the argument (remove the quotes from
+            # the arguments where necessary)
+            arg = " ".join(map(lambda x: x[1:-1]
+                               if x[0] == x[-1] == "\""
+                               else x,
+                               arg.replace(" ", "").split(",")))
+            self.do_show("{} {}".format(class_name, arg))
+        elif op == "destroy":
+            # parse the argument (remove the quotes from
+            # the arguments where necessary)
+            arg = " ".join(map(lambda x: x[1:-1]
+                               if x[0] == x[-1] == "\""
+                               else x,
+                               arg.replace(" ", "").split(",")))
+            self.do_destroy("{} {}".format(class_name, arg))
+        elif op == "update":
+            # parse the argument (remove the quotes from
+            # the arguments where necessary)
+            arg = " ".join([x[1:-1]
+                            if x[0] == x[-1] == "\"" and i != 2
+                            else x
+                            for i, x in
+                            enumerate(arg.replace(" ", "").split(","))])
+            self.do_update("{} {}".format(class_name, arg))
 
 
 if __name__ == '__main__':
