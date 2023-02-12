@@ -20,14 +20,12 @@ from models.place import Place
 class TestFileStorageInit(unittest.TestCase):
     """ Test cases for FileStorage class init """
 
-
     def resetStorage(self):
         """ Reset Storage """
         FileStorage._FileStorage__objects = {}
         if os.path.isfile(FileStorage._FileStorage__file_path):
             os.remove(FileStorage._FileStorage__file_path)
 
-    
     def test_5_init(self):
         """ Init """
         self.assertEqual(type(storage).__name__, "FileStorage")
@@ -188,6 +186,7 @@ class TestFileStotageMethods(unittest.TestCase):
         # What happens when an arg is passed? TypeError is raised
         with self.assertRaises(TypeError):
             storage.reload(None)
+
 
 if __name__ == "__main__":
     unittest.main()
