@@ -72,8 +72,8 @@ class TestBaseModel(unittest.TestCase):
         base_model = BaseModel()
         base_model.save()
         self.assertNotEqual(
-                base_model.created_at.microsecond,
-                base_model.updated_at.microsecond
+                base_model.created_at,
+                base_model.updated_at
                 )
 
     def test_3_to_dict(self):
