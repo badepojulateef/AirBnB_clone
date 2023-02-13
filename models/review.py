@@ -9,11 +9,6 @@ class Review(BaseModel):
     """
     Review - the Review class
     """
-    def __init__(self, *args, **kwargs):
-        """
-        initialize a new Review instance
-        """
-        self.place_id = ""
-        self.user_id = ""
-        self.text = ""
-        super().__init__(*args, **kwargs)
+    place_id = ""
+    user_id = ""
+    text = ""

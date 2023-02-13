@@ -9,9 +9,4 @@ class Amenity(BaseModel):
     """
     Amenity - the Amenity class
     """
-    def __init__(self, *args, **kwargs):
-        """
-        initialize a new Amenity instance
-        """
-        self.name = ""
-        super().__init__(*args, **kwargs)
+    name = ""
