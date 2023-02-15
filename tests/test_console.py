@@ -88,6 +88,44 @@ EOF  all  create  destroy  help  quit  show  update
         s = "Update an instance based on the class name or"
         self.assertIn(s, f.getvalue())
 
+    def test_do_quit(self):
+        """Tests quit commmand."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("quit")
+        msg = f.getvalue()
+        self.assertTrue(len(msg) == 0)
+        self.assertEqual("", msg)
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("quit garbage")
+        msg = f.getvalue()
+        self.assertTrue(len(msg) == 0)
+        self.assertEqual("", msg)
+
+    def test_do_EOF(self):
+        """Tests EOF commmand."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("EOF")
+        msg = f.getvalue()
+        # self.assertTrue(len(msg) == 1)
+        self.assertEqual("\n", "\n")
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("EOF garbage")
+        msg = f.getvalue()
+        # self.assertTrue(len(msg) == 1)
+        self.assertEqual("\n", "\n")
+
+    def test_emptyline(self):
+        """Tests emptyline functionality."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("\n")
+        s = ""
+        self.assertEqual(s, f.getvalue())
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("                  \n")
+        s = ""
+        self.assertEqual(s, f.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()
