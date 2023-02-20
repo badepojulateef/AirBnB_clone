@@ -23,3 +23,6 @@ section.filters button {
 	border-radius: 4px;
 	margin-right: 30px;
 }
+section.filters button:hover {
+	opacity: .9;
+}
